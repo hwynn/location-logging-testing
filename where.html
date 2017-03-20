@@ -2,13 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=windows-1252">
-		<link rel="stylesheet" type="text/css" href="loginstyle.css">
+		<link rel="stylesheet" type="text/css" href="wherestyle.css">
 		<script src="wherescript.js"></script>
 	</head>
 	<body>
-		<div class="center">
-			<p>Where Am I?</p>
-			<button id="findme"></button>
+		<div id="middlePane" class="center">
+		<!--http://encycolorpedia.com/d9d1ba-->
+			<div class="formfield center">
+			<!--http://cssfontstack.com/oldsites/cssfontstack/-->
+				<p id="header">Where Am I?</p>
+			</div>
+			<div class="formfield center">
+				<button id="findme" onmouseup="findMe()">FIND OUT NOW!</button>
+			</div>
+			<p id="whereinfo"></p>
 		</div>
 	</body>
 </html>
