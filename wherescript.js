@@ -14,7 +14,7 @@ function findMe(){
 			var	vD_LO = my_position.coords.longitude.toString();
 			var vN_A = "accy=";
 			var	vD_A = my_position.coords.accuracy.toString();
-			var vN_T = "time=";
+			var vN_T = "t=";
 			var	vD_T = my_position.timestamp.toString();
 				
 			var url = "places.php";
