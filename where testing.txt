@@ -1,0 +1,38 @@
+my apartment location according to:
+google maps:	38.958061, -95.272660
+geolocation on laptop:
+Latitude: 38.9580342
+Longitude: -95.2726007
+38.9580342, -95.2726007
+geolocation on tablet:
+Latitude: 38.9580585
+Longitude: -95.2726475
+38.9580585, -95.2726475
+
+
+<p>Click the button to get your coordinates.</p>
+
+<button onclick="getLocation()">Try It</button>
+
+<p id="demo"></p>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(my_position){
+		    x.innerHTML = "Latitude: " + my_position.coords.latitude + 
+			"<br>Longitude: " + my_position.coords.longitude;
+		});
+    } else { 
+        x.innerHTML = "Geolocation is not supported by this browser.";
+    }
+}
+
+</script>
+
+//http://stackoverflow.com/questions/7071544/post-from-xmlhttp-with-parameters
+//https://www.w3schools.com/php/php_ajax_database.asp
+
+http://php.net/manual/en/function.boolval.php
