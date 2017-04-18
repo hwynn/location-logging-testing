@@ -1,4 +1,14 @@
 app.controller('MainController', ['$scope', function($scope) {
+	  if (navigator.geolocation) {
+		navigator.geolocation.getCurrentPosition(function(position){
+			$scope.$apply(function(){
+			$scope.myLatitude = position.coords.latitude.toString();
+			$scope.myLongitude = position.coords.longitude.toString();
+			});
+		});
+	//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
+	}
+	
 	$scope.bathrooms = 
 	[ 
 		{ 
@@ -53,11 +63,19 @@ app.controller('MainController', ['$scope', function($scope) {
 
 }]);
 
+function captureUserLocation() {
+    geolocationSvc.getCurrentPosition().then(onUserLocationFound);
+}
+
+
 // https://www.w3schools.com/angular/angular_sql.asp
 
 
+
+
+/*
 app.controller('MainController', ['$scope', 'myLocation', function($scope, myLocation) { 
     myLocation.success(function(data) { 
     $scope.geolocationshitIguess = data; 
   });
-}]);
+}]);*/
