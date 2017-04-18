@@ -54,3 +54,10 @@ app.controller('MainController', ['$scope', function($scope) {
 }]);
 
 // https://www.w3schools.com/angular/angular_sql.asp
+
+
+app.controller('MainController', ['$scope', 'myLocation', function($scope, myLocation) { 
+    myLocation.success(function(data) { 
+    $scope.geolocationshitIguess = data; 
+  });
+}]);
