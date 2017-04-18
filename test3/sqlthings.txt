@@ -1,0 +1,157 @@
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+create new table from table of bathroom records
+CREATE TABLE  `hwynn`.`Restroom2` (
+`ID` INT( 11 ) NOT NULL AUTO_INCREMENT ,
+ `Latitude` DECIMAL( 10, 7 ) NOT NULL ,
+ `Longitude` DECIMAL( 10, 7 ) NOT NULL ,
+ `Accuracy` INT( 11 ) NOT NULL ,
+ `Epoch_time` BIGINT( 20 ) NOT NULL ,
+ `Altitude` INT( 11 ) DEFAULT NULL ,
+ `Alt_accuracy` INT( 11 ) DEFAULT NULL ,
+ `Gender` TINYTEXT NOT NULL ,
+ `Handi_access` TINYINT( 1 ) NOT NULL ,
+ `Floor` INT( 11 ) NOT NULL ,
+PRIMARY KEY (  `ID` )
+) ENGINE = MYISAM DEFAULT CHARSET = latin1 AUTO_INCREMENT =105;
+
+INSERT INTO  `hwynn`.`Restroom2` 
+SELECT * 
+FROM  `hwynn`.`Restrooms`;
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Delete this table
+DROP TABLE Restroom2;
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Recalculate IDs in a table		//http://stackoverflow.com/questions/740358/reorder-reset-auto-increment-primary-key
+
+SET @count = 0;
+UPDATE `Restroom2` SET `Restroom2`.`ID` = @count:= @count + 1;
+ALTER TABLE `Restroom2` AUTO_INCREMENT = 1;
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+all results and columns from bathroom (first 30 results)
+
+SELECT * 
+FROM  `Restroom2` 
+LIMIT 0 , 30
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+all results and columns from bathroom (first 30 results. sorted by accuracy, lowest first)
+
+SELECT * 
+FROM  `Restroom2` 
+ORDER BY  `Restroom2`.`Accuracy` ASC 
+LIMIT 0 , 30
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+bathrooms not on floor 400 or 9 (and accuracy is less than 100)
+
+SELECT * 
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+LIMIT 0 , 30
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+floors, genders, latitude, longitude, and accessibility from bathrooms (not on floor 400 or 9)
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`, `Handi_access`
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+LIMIT 0 , 30
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+floors, genders, latitude, longitude, and a new column for the sum of the latitude and longitude (don't add the column to the database, just the result) (not on floor 400 or 9)
+//http://stackoverflow.com/questions/14877797/how-to-sum-two-fields-within-an-sql-query
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`, SUM(`Latitude` + `Longitude`), `Accuracy`, `Handi_access`
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+GROUP   BY ID
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+floors, genders, latitude, longitude, and a new column for a formatted date stamp from the epoch
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`, `Epoch_time`, DATE_ADD(FROM_UNIXTIME(0), INTERVAL `Epoch_time`/1000 SECOND) AS Date
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+GROUP   BY ID
+
+//spent 3 hours trying to solve this problem of converting my int timestamp to a date format. It turns out geolocation timestamp stores it to the millisecond. I was treating it as seconds since the epoch
+https://www.epochconverter.com/programming/mysql
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+given latitude and longitude from the page, return a table of the latitudes, longitudes, and a new column of the sum of the user's coordinates and the table's coordinates
+
+6367
+
+user lat 38.9576066 user long -95.2537941
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`,
+3959 * acos( cos( RADIANS(38.9576066, -95.2537941) ) 
+      * cos( RADIANS(`Latitude`) ) 
+      * cos( RADIANS(`Longitude`) - RADIANS(-95.2537941)) + sin(RADIANS(38.9576066))
+      * sin( RADIANS(`Latitude`) ) AS distance
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+GROUP   BY ID //not working
+
+ROUND(column_name,decimals)
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`,
+   111.111 * 1000 *
+    DEGREES(ACOS(COS(RADIANS(38.9576066))
+         * COS(RADIANS(`Latitude`))
+         * COS(RADIANS(-95.2537941 - `Longitude`))
+         + SIN(RADIANS(38.9576066))
+         * SIN(RADIANS(`Latitude`)))) AS distance_in_meters
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+GROUP   BY ID
+ORDER BY distance_in_meters
+
+http://stackoverflow.com/questions/24370975/find-distance-between-two-points-using-latitude-and-longitude-in-mysql
+
+
+SELECT `Floor`, `Gender`, `Latitude`, `Longitude`,
+   (
+    6371 * 1000 * acos (
+      cos ( radians(38.9576066) )
+      * cos( radians( `Latitude` ) )
+      * cos( radians( `Longitude` ) - radians(-95.2537941) )
+      + sin ( radians(38.9576066) )
+      * sin( radians( `Latitude` ) )
+    )
+  ) AS distance,
+  
+FROM  `Restroom2` 
+WHERE  `Floor` <9
+AND  `Accuracy` <100
+GROUP   BY ID
+ORDER BY distance
+
+https://gis.stackexchange.com/questions/31628/find-points-within-a-distance-using-mysql
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+given latitude and longitude from the page, return a table of the latitudes, longitudes, and a new column of the distance between the user's coordinates and the table's coordinates
+sort results by distance
+
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+given latitude and longitude from the page, return a table of the latitudes, longitudes, and a new column of the distance between the user's coordinates and the table's coordinates
+sort results by distance and only show the closest 30 results
+
+//----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+given latitude, longitude, and floor from the page, return a table of the floor, distance to the bathroom, the gender of the bathroom, if it's accessible 
+only show results on the given floor, show the closest 30 results to the use, sort these results by the distance
+
+
+
+
+will this help us? http://www.w3resource.com/mysql/mysql-spatial-data-types.php

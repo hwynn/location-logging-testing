@@ -52,3 +52,5 @@ app.controller('MainController', ['$scope', function($scope) {
 	];
 
 }]);
+
+// https://www.w3schools.com/angular/angular_sql.asp
