@@ -1,9 +1,30 @@
-app.controller('MainController', ['$scope', function($scope) {
+app.controller('MainController', ['$scope', function($scope, $http) {
 	  if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			$scope.$apply(function(){
 			$scope.myLatitude = position.coords.latitude.toString();
 			$scope.myLongitude = position.coords.longitude.toString();
+			$http({
+				 url: "js/locationAsk.php", 
+				 method: "GET",
+				 params: {
+					 mylat: $scope.myLatitude,
+					 mylong: $scope.myLongitude
+					 }  
+			}).then(function successCallback(response) {
+				$scope.content = response.data;
+				$scope.statuscode = response.status;
+				$scope.statustext = response.statustext;
+				// this callback will be called asynchronously
+				// when the response is available
+			  }, function errorCallback(response) {
+				// called asynchronously if an error occurs
+				// or server returns response with an error status.
+				$scope.content = "Something went wrong";
+				//https://www.w3schools.com/angular/angular_http.asp
+			  });
+			
+			
 			});
 		});
 	//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
@@ -65,17 +86,7 @@ app.controller('MainController', ['$scope', function($scope) {
 
 
 
-$http({
-     url: user.details_path, 
-     method: "GET",
-     params: {user_id: user.id}  
-}).then(function successCallback(response) {
-    // this callback will be called asynchronously
-    // when the response is available
-  }, function errorCallback(response) {
-    // called asynchronously if an error occurs
-    // or server returns response with an error status.
-  });
+
 
 
 // https://www.w3schools.com/angular/angular_sql.asp

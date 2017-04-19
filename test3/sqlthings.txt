@@ -109,7 +109,7 @@ SELECT `Floor`, `Gender`, `Latitude`, `Longitude`,
          * COS(RADIANS(`Latitude`))
          * COS(RADIANS(-95.2537941 - `Longitude`))
          + SIN(RADIANS(38.9576066))
-         * SIN(RADIANS(`Latitude`)))) AS distance_in_meters
+         * SIN(RADIANS(`Latitude`)))) AS distance_in_meters, `Handi_access`
 FROM  `Restroom2` 
 WHERE  `Floor` <9
 AND  `Accuracy` <100
