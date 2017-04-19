@@ -1,4 +1,4 @@
-app.controller('MainController', ['$scope', function($scope, $http) {
+app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 	  if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			$scope.$apply(function(){
@@ -12,18 +12,21 @@ app.controller('MainController', ['$scope', function($scope, $http) {
 					 mylong: $scope.myLongitude
 					 }  
 			}).then(function successCallback(response) {
+				console.log("We got a response!");
 				$scope.content = response.data;
 				$scope.statuscode = response.status;
 				$scope.statustext = response.statustext;
+				
 				// this callback will be called asynchronously
 				// when the response is available
 			  }, function errorCallback(response) {
 				// called asynchronously if an error occurs
 				// or server returns response with an error status.
 				$scope.content = "Something went wrong";
+				console.log("something bad happened");
 				//https://www.w3schools.com/angular/angular_http.asp
 			  });
-			
+			console.log("Hello?");
 			
 			});
 		});
