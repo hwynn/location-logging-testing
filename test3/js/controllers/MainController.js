@@ -63,9 +63,19 @@ app.controller('MainController', ['$scope', function($scope) {
 
 }]);
 
-function captureUserLocation() {
-    geolocationSvc.getCurrentPosition().then(onUserLocationFound);
-}
+
+
+$http({
+     url: user.details_path, 
+     method: "GET",
+     params: {user_id: user.id}  
+}).then(function successCallback(response) {
+    // this callback will be called asynchronously
+    // when the response is available
+  }, function errorCallback(response) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+  });
 
 
 // https://www.w3schools.com/angular/angular_sql.asp
