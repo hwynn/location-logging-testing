@@ -17,7 +17,7 @@
          * COS(RADIANS('$mylongitude' - `Longitude`))
          + SIN(RADIANS('$mylatitude'))
          * SIN(RADIANS(`Latitude`))))) AS distance_in_meters, `Handi_access`
-	FROM  `Restroom2` 
+	FROM  `Restrooms` 
 	WHERE  `Floor` <9
 	AND  `Accuracy` <100
 	GROUP   BY ID
@@ -35,5 +35,3 @@ if ($result = mysqli_query($mysqli, $tellMeThis)) {
 	//http://stackoverflow.com/questions/34897071/return-php-mysql-select-as-json
 }
 ?>
-
-

@@ -1,5 +1,23 @@
 app.controller('MainController', ['$scope', '$http', function($scope, $http) {
-	  if (navigator.geolocation) {
+	$scope.sortType = 	'content.Floor';
+	$scope.sortReverse = false;
+	
+	
+	$scope.getMyPosition = function(){
+		var fucknuts = [ NULL, NULL ];
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(function(position){
 			$scope.$apply(function(){
 			$scope.myLatitude = position.coords.latitude.toString();
@@ -16,6 +34,8 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 				$scope.content = response.data;
 				$scope.statuscode = response.status;
 				$scope.statustext = response.statustext;
+				
+				
 				
 				// this callback will be called asynchronously
 				// when the response is available
@@ -91,15 +111,48 @@ app.controller('MainController', ['$scope', '$http', function($scope, $http) {
 
 
 
-
+//http://stackoverflow.com/questions/28860910/create-an-angularjs-factory-object-to-hold-an-array
 // https://www.w3schools.com/angular/angular_sql.asp
 
+var app = angular.module('myApp', []);
+app.service('hexafy', function() {
+    this.myFunc = function (x) {
+        return x.toString(16);
+    }
+});
+app.filter('myFormat',['hexafy', function(hexafy) {
+    return function(x) {
+        return hexafy.myFunc(x);
+    };
+}]);
+app.controller('myCtrl', function($scope) {
+    $scope.counts = [255, 251, 200];
+});
 
 
 
-/*
-app.controller('MainController', ['$scope', 'myLocation', function($scope, myLocation) { 
-    myLocation.success(function(data) { 
-    $scope.geolocationshitIguess = data; 
-  });
-}]);*/
+
+<script>
+         var mainApp = angular.module("mainApp", []);
+         
+         mainApp.factory('MathService', function() {
+            var factory = {};
+            
+            factory.multiply = function(a, b) {
+               return a * b
+            }
+            return factory;
+         });
+         
+         mainApp.service('CalcService', function(MathService){
+            this.square = function(a) {
+               return MathService.multiply(a,a);
+            }
+         });
+         
+         mainApp.controller('CalcController', function($scope, CalcService) {
+            $scope.square = function() {
+               $scope.result = CalcService.square($scope.number);
+            }
+         });
+      </script>

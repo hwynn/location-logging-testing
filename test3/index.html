@@ -12,22 +12,98 @@
 		</div>
 		<!-- source to show us how to sort tables https://scotch.io/tutorials/sort-and-filter-a-table-using-angular-->
 		<div ng-controller="MainController">
+		<button type="button" href="#" ng-click="updateB()">Get Data</button>
+			<div id="topMenu"></div>
 			<table>
+				<th>
+					<td>Floor</td>
+					<td>Distance</td>
+					<td>Gender</td>
+					<td>Handicap Access</td>
+				</th>
 				<tr ng-repeat="x in content">
-					<td>Floor {{ x.Floor }}</td>
+					<td>{{ x.Floor }}</td>
 					<td>{{ x.distance_in_meters }}m</td>
 					<td>{{ x.Gender }}</td>
 					<td>{{ x.Handi_access }}</td>
 				</tr>
-				
 			</table>
 		</div>
-	<!--I might need this https://docs.angularjs.org/guide/bootstrap-->
+		<!--I might need this https://docs.angularjs.org/guide/bootstrap-->
 		<!-- Modules -->
-		<script src="js/app.js"></script>
+		<!--<script src="js/app.js"></script>-->
 
 		<!-- Controllers -->
-		<script src="js/controllers/MainController.js"></script>
+		<!--<script src="js/controllers/MainController.js"></script>-->
+		<script>
+         var app = angular.module('locationDataApp', []);
+		 
+		 //this acts as a middle man to store and provide the user's location for other functions
+		 app.factory('locationManager', function() {
+			var UserCoordinates = {};
+			
+			var SetUserCoordinates = function(x){
+				UserCoordinates = x;
+				return UserCoordinates;
+			};			
+			
+			var SetUserCoordinates = function(){
+				return UserCoordinates;
+			};
+
+			//return as object
+			return{setStoredLoc: SetUserCoordinates, getStoredLoc: SetUserCoordinates};
+		 });
+         
+         app.controller('MainController', ['$scope', 'locationManager', '$http', function($scope, locationManager, $http) {
+			$scope.sortType = 	'content.Floor';
+			$scope.sortReverse = false;
+			
+			
+			$scope.getGeolocationData = function(position){
+				$scope.$apply(function(){
+				$scope.myLatitude = position.coords.latitude.toString();
+				$scope.myLongitude = position.coords.longitude.toString();
+				$http({
+					 url: "js/locationAsk.php", 
+					 method: "GET",
+					 params: {
+						 mylat: $scope.myLatitude,
+						 mylong: $scope.myLongitude
+						 }  
+				}).then(function successCallback(response) {
+					console.log("We got a response!");
+					$scope.content = response.data;
+					$scope.statuscode = response.status;
+					$scope.statustext = response.statustext;
+					
+					// this callback will be called asynchronously
+					// when the response is available
+				  }, function errorCallback(response) {
+					// called asynchronously if an error occurs
+					// or server returns response with an error status.
+					$scope.content = "Something went wrong";
+					console.log("something bad happened");
+					//https://www.w3schools.com/angular/angular_http.asp
+				  });
+				console.log("Hello?");
+				
+				});
+			}
+			
+			
+			$scope.updateB = function() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition($scope.getGeolocationData);
+				}
+			}
+			
+			$scope.updateB
+
+					//http://stackoverflow.com/questions/30613442/angularjs-geolocation-data-update help with structuring and calling services
+			//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
+		}]);
+		</script>
 
 	</body>
 </html>
