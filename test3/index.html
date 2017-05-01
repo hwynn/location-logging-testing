@@ -12,6 +12,13 @@
 		</div>
 		<!-- source to show us how to sort tables https://scotch.io/tutorials/sort-and-filter-a-table-using-angular-->
 		<div ng-controller="MainController">
+		
+		<div id="userinput">
+		<label ng-repeat="(gender, enabled) in Genders">
+			<input type="checkbox" ng-model="Genders[gender]">{{gender}}
+		</label>
+		<p>genders: {{Genders}}</p>
+		</div>
 		<button type="button" href="#" ng-click="updateB()">Get Data</button>
 			<div id="topMenu"></div>
 			<table>
@@ -42,6 +49,7 @@
 		 app.factory('locationManager', function() {
 			var UserCoordinates = {};
 			
+			//this will get the user's location passed into the argument as an object
 			var SetUserCoordinates = function(x){
 				UserCoordinates = x;
 				return UserCoordinates;
@@ -56,14 +64,11 @@
 		 });
          
          app.controller('MainController', ['$scope', 'locationManager', '$http', function($scope, locationManager, $http) {
-			$scope.sortType = 	'content.Floor';
-			$scope.sortReverse = false;
-			
-			
 			$scope.getGeolocationData = function(position){
 				$scope.$apply(function(){
 				$scope.myLatitude = position.coords.latitude.toString();
 				$scope.myLongitude = position.coords.longitude.toString();
+				
 				$http({
 					 url: "js/locationAsk.php", 
 					 method: "GET",
@@ -74,6 +79,8 @@
 				}).then(function successCallback(response) {
 					console.log("We got a response!");
 					$scope.content = response.data;
+					console.log(typeof response.data);
+					console.log(response.data[3]);
 					$scope.statuscode = response.status;
 					$scope.statustext = response.statustext;
 					
@@ -91,7 +98,6 @@
 				});
 			}
 			
-			
 			$scope.updateB = function() {
 				if (navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition($scope.getGeolocationData);
@@ -99,6 +105,8 @@
 			}
 			
 			$scope.updateB
+			
+			$scope.Genders= {Unisex: true, Female: true, Male: true};
 
 					//http://stackoverflow.com/questions/30613442/angularjs-geolocation-data-update help with structuring and calling services
 			//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
