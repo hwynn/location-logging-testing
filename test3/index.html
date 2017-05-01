@@ -86,11 +86,33 @@
 		 });
          
          app.controller('MainController', ['$scope', 'locationManager', '$http', function($scope, locationManager, $http) {
+
 			$scope.getGeolocationData = function(position){
 				$scope.$apply(function(){
 				$scope.myLatitude = position.coords.latitude.toString();
 				$scope.myLongitude = position.coords.longitude.toString();
-				
+				$scope.makeCall();
+				console.log("Hello?");
+				});
+			}
+			
+			//this should only be used inside getGeolocationData to ensure coordinates exist
+			$scope.makeCall = function(){
+								//generating sql code to exclude restrooms the user doesn't want to see
+				var keys = Object.keys($scope.Filters.Genders);
+				var unchecked = keys.filter(function(key) {
+					return (!$scope.Filters.Genders[key])
+				});
+				console.log(unchecked);
+				demands = "";	  
+				for(i=0; i<unchecked.length; i=i+1){
+				demands = demands.concat("AND NOT `Gender` = '", unchecked[i], "' ")
+				}
+				console.log(demands);
+				if($scope.Filters.HandicapOnly == true){
+				demands= demands.concat("AND `Handi_access`=1", " ");}
+				demands= demands.concat("AND `Floor`=", $scope.Filters.Floor, " ");
+				console.log(demands);
 				$http({
 					 url: "js/locationAsk.php", 
 					 method: "GET",
@@ -115,28 +137,27 @@
 					console.log("something bad happened");
 					//https://www.w3schools.com/angular/angular_http.asp
 				  });
-				console.log("Hello?");
-				
-				});
+				  
+
 			}
 			
 			$scope.updateB = function() {
 				if (navigator.geolocation) {
 					navigator.geolocation.getCurrentPosition($scope.getGeolocationData);
 				}
+			//http://stackoverflow.com/questions/30613442/angularjs-geolocation-data-update help with structuring and calling services
+			//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
 			}
 			
-			$scope.updateB
+			//$scope.updateB();
 			
 			$scope.Filters =
 			{
 				Floor: 0,
-				Genders: {Unisex: true, Female: true, Male: true}, //http://stackoverflow.com/questions/14514461/how-do-i-bind-to-list-of-checkbox-values-with-angularjs
+				Genders: {unisex: true, female: true, male: true}, //http://stackoverflow.com/questions/14514461/how-do-i-bind-to-list-of-checkbox-values-with-angularjs
 				HandicapOnly: false
 			}
 
-					//http://stackoverflow.com/questions/30613442/angularjs-geolocation-data-update help with structuring and calling services
-			//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
 		}]);
 		</script>
 
