@@ -14,10 +14,32 @@
 		<div ng-controller="MainController">
 		
 		<div id="userinput">
-		<label ng-repeat="(gender, enabled) in Genders">
-			<input type="checkbox" ng-model="Genders[gender]">{{gender}}
-		</label>
-		<p>genders: {{Genders}}</p>
+			<label ng-repeat="(gender, enabled) in Filters.Genders">
+				<input type="checkbox" ng-model="Filters.Genders[gender]">{{gender}}
+			</label>
+			<label>
+				<input type="checkbox" ng-model="Filters.HandicapOnly">Handicap Only
+			</label>
+			<select id="floor" name="floor" ng-model="Filters.Floor">
+				<option value="none" id="nofloor" selected> - </option>
+				<option value="-2">-2 (deeper basement)</option>
+				<option value="-1">-1 (basement)</option>
+				<option value="0">0</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="400">(just testing)</option>
+			</select>
+			<p>genders: {{Filters.Genders}}</p>
+			<p>handicap only?: {{Filters.HandicapOnly}}</p>
+			<p>floor {{Filters.Floor}}</p>
+
 		</div>
 		<button type="button" href="#" ng-click="updateB()">Get Data</button>
 			<div id="topMenu"></div>
@@ -106,7 +128,12 @@
 			
 			$scope.updateB
 			
-			$scope.Genders= {Unisex: true, Female: true, Male: true};
+			$scope.Filters =
+			{
+				Floor: 0,
+				Genders: {Unisex: true, Female: true, Male: true}, //http://stackoverflow.com/questions/14514461/how-do-i-bind-to-list-of-checkbox-values-with-angularjs
+				HandicapOnly: false
+			}
 
 					//http://stackoverflow.com/questions/30613442/angularjs-geolocation-data-update help with structuring and calling services
 			//http://stackoverflow.com/questions/23185619/how-can-i-use-html5-geolocation-in-angularjs
