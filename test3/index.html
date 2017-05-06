@@ -37,6 +37,7 @@
 				<option value="400">(just testing)</option>
 			</select>
 			<p>genders: {{Filters.Genders}}</p>
+			<p>female: {{Filters.Genders['female']}}</p>
 			<p>handicap only?: {{Filters.HandicapOnly}}</p>
 			<p>floor {{Filters.Floor}}</p>
 
@@ -98,27 +99,21 @@
 			
 			//this should only be used inside getGeolocationData to ensure coordinates exist
 			$scope.makeCall = function(){
-								//generating sql code to exclude restrooms the user doesn't want to see
-				var keys = Object.keys($scope.Filters.Genders);
-				var unchecked = keys.filter(function(key) {
-					return (!$scope.Filters.Genders[key])
-				});
-				console.log(unchecked);
-				demands = "";	  
-				for(i=0; i<unchecked.length; i=i+1){
-				demands = demands.concat("AND NOT `Gender` = '", unchecked[i], "' ")
-				}
-				console.log(demands);
-				if($scope.Filters.HandicapOnly == true){
-				demands= demands.concat("AND `Handi_access`=1", " ");}
-				demands= demands.concat("AND `Floor`=", $scope.Filters.Floor, " ");
-				console.log(demands);
+				console.log("is this running?");
 				$http({
-					 url: "js/locationAsk.php", 
-					 method: "GET",
-					 params: {
-						 mylat: $scope.myLatitude,
-						 mylong: $scope.myLongitude
+					url: "js/locationAsk.php", 
+					method: "GET",
+					params: {
+						mylat: $scope.myLatitude,
+						mylong: $scope.myLongitude,
+						//genders. False if results for that gender should be hidden
+						gu: $scope.Filters.Genders['unisex'],
+						gm: $scope.Filters.Genders['male'],
+						gf: $scope.Filters.Genders['female'],
+						//handicap. True if we should only show handicap results
+						hc: $scope.Filters.HandicapOnly,
+						//floor number.
+						fl: $scope.Filters.Floor
 						 }  
 				}).then(function successCallback(response) {
 					console.log("We got a response!");
@@ -130,14 +125,13 @@
 					
 					// this callback will be called asynchronously
 					// when the response is available
-				  }, function errorCallback(response) {
+				}, function errorCallback(response) {
 					// called asynchronously if an error occurs
 					// or server returns response with an error status.
 					$scope.content = "Something went wrong";
 					console.log("something bad happened");
 					//https://www.w3schools.com/angular/angular_http.asp
-				  });
-				  
+				});
 
 			}
 			
