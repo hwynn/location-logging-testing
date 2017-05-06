@@ -25,6 +25,10 @@
 				</label>
 			</div>
 			<br>
+			<p>genders: {{Filters.Genders}}</p>
+			<p>handicap only?: {{Filters.HandicapOnly}}</p>
+			<p>floor {{Filters.Floor}}</p>
+
 
 			<div class="formfield center">
 						<h3>Floor</h3>
@@ -77,7 +81,7 @@
 		<!-- Controllers -->
 		<!--<script src="js/controllers/MainController.js"></script>-->
 		<script>
-			function initMap(x, data) {
+			/*function initMap(x, data) {
 				var map = new google.maps.Map(document.getElementById('map'), {
 				  zoom: 19,
 				  center: x
@@ -94,12 +98,9 @@
 				console.log("boop");
 				for(var i in data)
 				{
-					console.log(data[i]);
-					console.log(typeof data[i].Gender);
 					var rgender = data[i].Gender.concat(" restroom");
 					var rdistance = data[i].distance_in_meters.concat(" meters away from you");
 					var contentString = '<div id="content">'+'<div id="siteNotice">'+'</div>'+'<div id="bodyContent">'+ data[i].Gender.concat(" restroom") + '<br>' + data[i].distance_in_meters.concat(" away from you") + '<br>' + '</div>'+'</div>';
-					console.log(contentString);
 					var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));	
 					//------------https://developers.google.com/maps/documentation/javascript/markers
 					
@@ -126,7 +127,7 @@
 					//-------------------
 			
 				}
-			 }
+			 }*/
 		
 		
          var app = angular.module('locationDataApp', []);
@@ -159,20 +160,24 @@
 						hc: $scope.Filters.HandicapOnly,
 						//floor number.
 						fl: $scope.Filters.Floor
-						 }  
+						}
+
 				}).then(function successCallback(response) {
 					console.log("We got a response!");
+					console.log($scope.Filters.Genders['female']);
+					console.log($scope.Filters.Genders['male']);
+					console.log($scope.Filters.Genders['unisex']);
 					$scope.content = response.data;
 					console.log(typeof response.data);
 					for(var i in response.data)
 					{
-					//console.log(response.data[i]);
+					console.log(response.data[i]);
 					}
 					$scope.statuscode = response.status;
 					$scope.statustext = response.statustext;
 					//--------------------google maps stuff
-					myLatLng = new google.maps.LatLng({lat: parseFloat($scope.myLatitude), lng: parseFloat($scope.myLongitude)});
-					initMap(myLatLng, response.data);
+					//myLatLng = new google.maps.LatLng({lat: parseFloat($scope.myLatitude), lng: parseFloat($scope.myLongitude)});
+					//initMap(myLatLng, response.data);
 
 					
 					//-------------------------------------
