@@ -49,7 +49,8 @@
 	$com3 = "
 	AND  `Accuracy` <100
 	GROUP   BY ID
-	ORDER BY distance_in_meters";
+	ORDER BY distance_in_meters
+	LIMIT 0 , 30";
 	//Did it work?
 	$tellMeThis = "{$com1}{$com2}{$com3}";
 	
