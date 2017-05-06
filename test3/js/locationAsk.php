@@ -9,10 +9,10 @@
 
 	$mylatitude = floatval($_GET[mylat]);
 	$mylongitude = floatval($_GET[mylong]);
-	$gu = boolval($_GET[gu]);
-	$gm = boolval($_GET[gm]);
-	$gf = boolval($_GET[gf]);
-	$hc = boolval($_GET[hc]);
+	$gu =filter_var($_GET[gu], FILTER_VALIDATE_BOOLEAN);
+	$gm = filter_var($_GET[gm], FILTER_VALIDATE_BOOLEAN);
+	$gf = filter_var($_GET[gf], FILTER_VALIDATE_BOOLEAN);
+	$hc = filter_var($_GET[hc], FILTER_VALIDATE_BOOLEAN);
 	$fl = intval($_GET[fl]);
 	
 	$com1 = "SELECT `Floor`, `Gender`, `Latitude`, `Longitude`,
