@@ -47,7 +47,8 @@
 		<div class="formfield center">
 			<button type="button" id="refresh" href="#" ng-click="updateB()">Search and Refresh</button>
 		</div>
-			<div id="topMenu"></div>
+		<div id="map"></div>	
+		<div id="topMenu"></div>
 			<table>
 				<tr>
 					<th>Floor</th>
@@ -66,7 +67,7 @@
 			</table>
 		</div>
 		
-		<div id="map"></div>	
+
 
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXe-9qkAhiSL2-WDNfT8624iaWBO6z3L4"
         async defer></script>
@@ -81,20 +82,45 @@
 				  zoom: 19,
 				  center: x
 				});
+				//custom markers made by: http://www.benjaminkeen.com/google-maps-coloured-markers/
 				var marker = new google.maps.Marker({
 				  position: x,
+				  icon: 'css/GoogleMapsMarkers/red_MarkerU', 
 				  map: map
 				});
 				
 				for(var i in data)
+					if(data[i].Gender=="female")
 					{
 						console.log(data[i]);
 						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
 						new google.maps.Marker({
 							position: restplace,
+							icon: 'css/GoogleMapsMarkers/pink_MarkerR', 
 							map: map
 						});
 					}
+					else if(data[i].Gender=="unisex")
+					{
+						console.log(data[i]);
+						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+						new google.maps.Marker({
+							position: restplace,
+							icon: 'css/GoogleMapsMarkers/purple_MarkerR', 
+							map: map
+						});
+					}
+					else if(data[i].Gender=="male")
+					{
+						console.log(data[i]);
+						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+						new google.maps.Marker({
+							position: restplace,
+							icon: 'css/GoogleMapsMarkers/blue_MarkerR', 
+							map: map
+						});
+					}
+					
 			 }
 		
 		
