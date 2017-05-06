@@ -82,38 +82,38 @@
 				  zoom: 19,
 				  center: x
 				});
+				//console.log(data[i].Gender + " restroom");
+				//console.log(data[i].distance_in_meters + " away from you");
+				
 				//custom markers made by: http://www.benjaminkeen.com/google-maps-coloured-markers/
 				var marker = new google.maps.Marker({
 				  position: x,
 				  icon: 'css/GoogleMapsMarkers/red_MarkerU', 
 				  map: map
 				});
-				
+				console.log("boop");
 				for(var i in data)
-					if(data[i].Gender=="female")
-					{
-						console.log(data[i]);
-						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+				{
+					console.log(data[i]);
+					console.log(typeof data[i].Gender);
+					var rgender = data[i].Gender.concat(" restroom");
+					var rdistance = data[i].distance_in_meters.concat(" away from you");
+					var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+					if(data[i].Gender=="female"){
 						new google.maps.Marker({
 							position: restplace,
 							icon: 'css/GoogleMapsMarkers/pink_MarkerR', 
 							map: map
 						});
 					}
-					else if(data[i].Gender=="unisex")
-					{
-						console.log(data[i]);
-						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+					else if(data[i].Gender=="unisex"){
 						new google.maps.Marker({
 							position: restplace,
 							icon: 'css/GoogleMapsMarkers/purple_MarkerR', 
 							map: map
 						});
 					}
-					else if(data[i].Gender=="male")
-					{
-						console.log(data[i]);
-						var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
+					else if(data[i].Gender=="male"){
 						new google.maps.Marker({
 							position: restplace,
 							icon: 'css/GoogleMapsMarkers/blue_MarkerR', 
@@ -121,6 +121,7 @@
 						});
 					}
 					
+				}
 			 }
 		
 		
@@ -194,7 +195,7 @@
 			
 			$scope.Filters =
 			{
-				Floor: 0,
+				Floor: 1,
 				Genders: {unisex: true, female: true, male: true}, //http://stackoverflow.com/questions/14514461/how-do-i-bind-to-list-of-checkbox-values-with-angularjs
 				HandicapOnly: false
 			}
