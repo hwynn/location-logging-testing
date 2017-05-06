@@ -86,7 +86,7 @@
 				//console.log(data[i].distance_in_meters + " away from you");
 				
 				//custom markers made by: http://www.benjaminkeen.com/google-maps-coloured-markers/
-				var marker = new google.maps.Marker({
+				var mymarker = new google.maps.Marker({
 				  position: x,
 				  icon: 'css/GoogleMapsMarkers/red_MarkerU', 
 				  map: map
@@ -97,30 +97,34 @@
 					console.log(data[i]);
 					console.log(typeof data[i].Gender);
 					var rgender = data[i].Gender.concat(" restroom");
-					var rdistance = data[i].distance_in_meters.concat(" away from you");
-					var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));
-					if(data[i].Gender=="female"){
-						new google.maps.Marker({
-							position: restplace,
-							icon: 'css/GoogleMapsMarkers/pink_MarkerR', 
-							map: map
-						});
-					}
-					else if(data[i].Gender=="unisex"){
-						new google.maps.Marker({
-							position: restplace,
-							icon: 'css/GoogleMapsMarkers/purple_MarkerR', 
-							map: map
-						});
-					}
-					else if(data[i].Gender=="male"){
-						new google.maps.Marker({
-							position: restplace,
-							icon: 'css/GoogleMapsMarkers/blue_MarkerR', 
-							map: map
-						});
-					}
+					var rdistance = data[i].distance_in_meters.concat(" meters away from you");
+					var contentString = '<div id="content">'+'<div id="siteNotice">'+'</div>'+'<div id="bodyContent">'+ data[i].Gender.concat(" restroom") + '<br>' + data[i].distance_in_meters.concat(" away from you") + '<br>' + '</div>'+'</div>';
+					console.log(contentString);
+					var restplace = new google.maps.LatLng(parseFloat(data[i].Latitude), parseFloat(data[i].Longitude));	
+					//------------https://developers.google.com/maps/documentation/javascript/markers
 					
+					var infowindow = new google.maps.InfoWindow();
+				
+					var marker = new google.maps.Marker({
+						map: map
+					});
+					marker.content = '<div id="content">'+'<div id="siteNotice">'+'</div>'+'<div id="bodyContent">'+ data[i].Gender.concat(" restroom") + '<br>' + data[i].distance_in_meters.concat(" away from you") + '<br>' + '</div>'+'</div>';
+					
+					marker.setPosition(restplace);
+					
+					if(data[i].Gender=="female"){marker.setIcon('css/GoogleMapsMarkers/pink_MarkerR');}
+					else if(data[i].Gender=="unisex"){marker.setIcon('css/GoogleMapsMarkers/purple_MarkerR');}
+					else if(data[i].Gender=="male"){marker.setIcon('css/GoogleMapsMarkers/blue_MarkerR');}
+					
+					//assistance with infowindow sharing http://stackoverflow.com/questions/3576488/google-maps-infowindow-only-loading-last-record-on-markers
+					//http://stackoverflow.com/questions/3576488/google-maps-infowindow-only-loading-last-record-on-markers
+					
+					google.maps.event.addListener(marker, 'click', function () {
+						infowindow.setContent(this.content);
+						infowindow.open(map, this);
+					}); 
+					//-------------------
+			
 				}
 			 }
 		
