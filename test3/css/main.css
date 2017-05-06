@@ -1,0 +1,56 @@
+#map {
+height: 400px;
+width: 100%;
+}
+
+#refresh{
+	padding: 28px 28px;
+font-size: 1.5em;
+}
+
+#floor{
+-webkit-appearance: menulist-button;
+height: 100px;
+width: 100px;
+font-size: 3em;
+}
+
+h1{
+	font-size: 3em;
+}
+
+h3, #genderform, #handicapform{
+	font-size: 2em;
+}
+
+.parent { overflow: hidden; }
+
+.center{
+  position: relative;
+  margin-left:auto;
+  margin-right:auto;
+  overflow: hidden;
+}
+
+table{
+	text-align: left;
+	border: 1px solid black;
+	width: 100%;
+}
+
+th, td {
+    padding: 15px;
+	border: 1px solid black;
+}
+
+tr{
+	height:	25px;
+}
+
+.formfield{
+  background-color: transparent;
+  margin-top: 5px;
+  width: 60%;
+  padding: 5px;
+  text-align: center;
+}
